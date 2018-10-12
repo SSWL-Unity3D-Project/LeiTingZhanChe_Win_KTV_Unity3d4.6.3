@@ -1,11 +1,37 @@
-﻿//#define USE_CENTER_ZUOYI
+﻿//#define SHOW_DEBUG_MSG
+//#define USE_CENTER_ZUOYI
 //#define COM_TANK_TEST
 using UnityEngine;
 using System.Collections;
 using System;
 using System.Collections.Generic;
 
-public class pcvr : MonoBehaviour {
+public class pcvr : MonoBehaviour
+{
+    /// <summary>
+    /// 视博云平台 ShiBoYunApk.
+    /// 咪咕平台   MiGuApk.
+    /// </summary>
+    //SSGamePayUICtrl.TVGamePayState _TVGamePayType = SSGamePayUICtrl.TVGamePayState.DianXinApk;
+    /// <summary>
+    /// 电视游戏支付平台.
+    /// </summary>
+    //public SSGamePayUICtrl.TVGamePayState m_TVGamePayType
+    //{
+    //    set { _TVGamePayType = value; }
+    //    get { return _TVGamePayType; }
+    //}
+    /// <summary>
+    /// 微信小程序虚拟手柄.
+    /// </summary>
+    public SSBoxPostNet.WeiXinShouBingEnum m_WXShouBingType
+    {
+        get
+        {
+            return SSBoxPostNet.WeiXinShouBingEnum.XiaoChengXu;
+        }
+    }
+
     /// <summary>
     /// 是否为红点点微信手柄操作模式.
     /// </summary>
@@ -104,6 +130,10 @@ public class pcvr : MonoBehaviour {
 			GameObject obj = new GameObject("_PCVR");
 			DontDestroyOnLoad(obj);
 			_Instance = obj.AddComponent<pcvr>();
+
+            //创建游戏Debug信息展示组件.
+            _Instance.CreatGameDebugMsgCom();
+            //初始化pcvr.
             _Instance.InitInfo();
 			if (bIsHardWare) {
 				obj.AddComponent<MyCOMDevice>();
@@ -125,10 +155,169 @@ public class pcvr : MonoBehaviour {
                 _Instance.m_SSBoxPostNet.Init();
                 _Instance.m_BarcodeCam = obj.AddComponent<BarcodeCam>();
             }
-		}
+
+            //创建咪咕Tv支付组件.
+            //_Instance.CreatMiGuTvPayObject();
+
+            //创建游戏咪咕包月支付信息记录和查询组件.
+            //_Instance.CreatGameMiGuBaoYuePostNet();
+        }
 		return _Instance;
 	}
-	
+
+    /// <summary>
+    /// 游戏咪咕包月支付信息记录和查询组件.
+    /// </summary>
+    //[HideInInspector]
+    //public SSGameMiGuBaoYuePostNet m_GameMiGuBaoYuePostNet;
+    /// <summary>
+    /// 创建游戏咪咕包月支付信息记录和查询组件.
+    /// </summary>
+    //void CreatGameMiGuBaoYuePostNet()
+    //{
+    //    if (m_TVGamePayType != SSGamePayUICtrl.TVGamePayState.MiGuApk)
+    //    {
+    //        //游戏支付平台不是移动咪咕游戏支付时,不进行咪咕包月支付信息记录和查询组件的创建.
+    //        return;
+    //    }
+
+    //    if (m_GameMiGuBaoYuePostNet == null)
+    //    {
+    //        m_GameMiGuBaoYuePostNet = gameObject.AddComponent<SSGameMiGuBaoYuePostNet>();
+    //        m_GameMiGuBaoYuePostNet.Init();
+    //    }
+    //}
+
+    /// <summary>
+    /// 获取咪咕游戏玩家是否对游戏进行了包月.
+    /// </summary>
+    //internal bool GetMiGuPlayerIsBaoYueGame()
+    //{
+    //    bool isBaoYueGame = false;
+    //    if (m_GameMiGuBaoYuePostNet != null)
+    //    {
+    //        isBaoYueGame = m_GameMiGuBaoYuePostNet.GetPlayerIsBaoYueGame();
+    //    }
+    //    return isBaoYueGame;
+    //}
+
+    /// <summary>
+    /// 游戏Debug信息展示组件.
+    /// </summary>
+    //[HideInInspector]
+    //public SSGameDebugMsg m_GameDebugMsgCom;
+    /// <summary>
+    /// 创建游戏Debug信息展示组件.
+    /// </summary>
+    void CreatGameDebugMsgCom()
+    {
+#if SHOW_DEBUG_MSG
+        if (m_GameDebugMsgCom == null)
+        {
+            m_GameDebugMsgCom = gameObject.AddComponent<SSGameDebugMsg>();
+        }
+#endif
+    }
+
+    /// <summary>
+    /// 添加Debug消息.
+    /// </summary>
+    //public void AddDebugMsg(string msg)
+    //{
+    //    if (m_GameDebugMsgCom != null)
+    //    {
+    //        m_GameDebugMsgCom.AddMsg(msg);
+    //    }
+    //}
+
+    /// <summary>
+    /// 咪咕Tv支付组件.
+    /// </summary>
+    //[HideInInspector]
+    //public MiGuTv_InterFace m_MiGuTv_InterFace;
+    /// <summary>
+    /// 咪咕Tv支付检测组件.
+    /// </summary>
+    //[HideInInspector]
+    //public SSMiGuTvCheck m_SSMiGuTvCheck;
+    /// <summary>
+    /// 创建咪咕Tv支付组件.
+    /// </summary>
+    //void CreatMiGuTvPayObject()
+    //{
+    //    if (m_TVGamePayType != SSGamePayUICtrl.TVGamePayState.MiGuApk)
+    //    {
+    //        //游戏支付平台不是移动咪咕游戏支付时,不进行咪咕支付组件的创建.
+    //        return;
+    //    }
+    //    GameObject obj = new GameObject("MiGuTv_InterFace");
+    //    obj.transform.SetParent(transform);
+    //    m_MiGuTv_InterFace = obj.AddComponent<MiGuTv_InterFace>();
+    //    m_SSMiGuTvCheck = obj.AddComponent<SSMiGuTvCheck>();
+    //    m_SSMiGuTvCheck.Init();
+    //}
+
+    /// <summary>
+    /// 延时查询咪咕电视游戏包月状态.
+    /// </summary>
+    //public void DelayQueryMiGuTVGameBaoYueStata()
+    //{
+    //    if (m_TVGamePayType != SSGamePayUICtrl.TVGamePayState.MiGuApk)
+    //    {
+    //        //游戏支付平台不是移动咪咕游戏支付时,不进行咪咕支付组件的创建.
+    //        return;
+    //    }
+
+    //    bool isBaoYueGame = GetMiGuPlayerIsBaoYueGame();
+    //    if (isBaoYueGame)
+    //    {
+    //        //玩家已经对游戏进行了包月.
+    //        return;
+    //    }
+
+    //    if (m_SSMiGuTvCheck != null)
+    //    {
+    //        m_SSMiGuTvCheck.DelayQueryGameBaoYueState();
+    //    }
+    //}
+
+    /// <summary>
+    /// 关闭延时查询咪咕电视游戏包月状态的事件.
+    /// </summary>
+    //public void CloseDelayQueryMiGuTVGameBaoYueStata()
+    //{
+    //    if (m_TVGamePayType != SSGamePayUICtrl.TVGamePayState.MiGuApk)
+    //    {
+    //        //游戏支付平台不是移动咪咕游戏支付时,不进行咪咕支付组件的创建.
+    //        return;
+    //    }
+
+    //    if (m_SSMiGuTvCheck != null)
+    //    {
+    //        m_SSMiGuTvCheck.CloseQueryGameBaoYueState();
+    //    }
+    //}
+
+    /// <summary>
+    /// 打开安卓端咪咕包月支付界面.
+    /// </summary>
+    //public void OpenMiGuBaoYueZhiFuPanel()
+    //{
+    //    if (m_TVGamePayType != SSGamePayUICtrl.TVGamePayState.MiGuApk)
+    //    {
+    //        //游戏支付平台不是移动咪咕游戏支付时,不进行咪咕支付组件的创建.
+    //        return;
+    //    }
+
+    //    if (m_SSMiGuTvCheck != null)
+    //    {
+    //        m_SSMiGuTvCheck.QueryGameBaoYueState();
+    //    }
+    //}
+
+    /// <summary>
+    /// 初始化信息.
+    /// </summary>
     void InitInfo()
     {
         for (int i = 0; i < m_GmWXLoginDt.Length; i++)
@@ -168,7 +357,7 @@ public class pcvr : MonoBehaviour {
 
 	void Start()
 	{
-		HID_BUF_LEN_WRITE = MyCOMDevice.ComThreadClass.BufLenWrite;
+        HID_BUF_LEN_WRITE = MyCOMDevice.ComThreadClass.BufLenWrite;
 		lastUpTime = Time.realtimeSinceStartup;
 		InitHandleJsonInfo();
 		InitJiaoYanMiMa();
@@ -473,6 +662,7 @@ public class pcvr : MonoBehaviour {
     /// </summary>
     [HideInInspector]
     public byte[] m_IndexPlayerActiveGameState = new byte[4];
+    public string[] m_PlayerHeadUrl = new string[4];
     public void SetIndexPlayerActiveGameState(int index, byte activeState)
     {
         m_IndexPlayerActiveGameState[index] = activeState;
@@ -573,23 +763,27 @@ public class pcvr : MonoBehaviour {
                     || val == PlayerShouBingFireBt.fireXDown.ToString())
                 {
                     InputEventCtrl.GetInstance().OnClickFireBt(playerDt.Index, ButtonState.DOWN);
+                    InputEventCtrl.GetInstance().OnClickDaoDanBt(playerDt.Index, ButtonState.DOWN);
                 }
 
                 if (val == PlayerShouBingFireBt.fireAUp.ToString()
                     || val == PlayerShouBingFireBt.fireXUp.ToString())
                 {
                     InputEventCtrl.GetInstance().OnClickFireBt(playerDt.Index, ButtonState.UP);
+                    InputEventCtrl.GetInstance().OnClickDaoDanBt(playerDt.Index, ButtonState.UP);
                 }
 
                 if (val == PlayerShouBingFireBt.fireBDown.ToString()
                     || val == PlayerShouBingFireBt.fireYDown.ToString())
                 {
+                    InputEventCtrl.GetInstance().OnClickFireBt(playerDt.Index, ButtonState.DOWN);
                     InputEventCtrl.GetInstance().OnClickDaoDanBt(playerDt.Index, ButtonState.DOWN);
                 }
 
                 if (val == PlayerShouBingFireBt.fireBUp.ToString()
                     || val == PlayerShouBingFireBt.fireYUp.ToString())
                 {
+                    InputEventCtrl.GetInstance().OnClickFireBt(playerDt.Index, ButtonState.UP);
                     InputEventCtrl.GetInstance().OnClickDaoDanBt(playerDt.Index, ButtonState.UP);
                 }
             }
@@ -775,14 +969,24 @@ public class pcvr : MonoBehaviour {
 
         for (int i = 0; i < m_GmWXLoginDt.Length; i++)
         {
-            m_GmWXLoginDt[i].IsLoginWX = false;
-            m_GmWXLoginDt[i].IsActiveGame = false;
-            m_GmWXLoginDt[i].m_GamePadType = GamePadType.Null;
+            if (m_GmWXLoginDt[i] != null)
+            {
+                m_GmWXLoginDt[i].IsLoginWX = false;
+                m_GmWXLoginDt[i].IsActiveGame = false;
+                m_GmWXLoginDt[i].m_GamePadType = GamePadType.Null;
+            }
         }
-        m_TVYaoKongPlayerDt.Clear();
 
-        m_GmTVLoginDt.Reset();
-        m_GmTVLoginDt = null;
+        if (m_TVYaoKongPlayerDt != null)
+        {
+            m_TVYaoKongPlayerDt.Clear();
+        }
+
+        if (m_GmTVLoginDt != null)
+        {
+            m_GmTVLoginDt.Reset();
+            m_GmTVLoginDt = null;
+        }
     }
 
     private void OnEventPlayerLoginBox(WebSocketSimpet.PlayerWeiXinData val)
@@ -875,8 +1079,6 @@ public class pcvr : MonoBehaviour {
             InputEventCtrl.GetInstance().OnClickGameStartBt(indexPlayer);
         }
     }
-
-    public string[] m_PlayerHeadUrl = new string[4];
 
     // Update is called once per frame
     void Update()

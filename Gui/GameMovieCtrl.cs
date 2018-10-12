@@ -1,4 +1,5 @@
-﻿//#define TEST_MOVIE
+﻿#define READ_SCREEN_CONFIG
+//#define TEST_MOVIE
 using UnityEngine;
 
 public class GameMovieCtrl : SSGameMono
@@ -43,7 +44,11 @@ public class GameMovieCtrl : SSGameMono
 	{
 		return _instance;
 	}
-	
+
+    /// <summary>
+    /// 是否读取屏幕分辨率信息.
+    /// </summary>
+    internal static bool IsReadScreenConfig = false;
 	// Use this for initialization
 	void Awake()
 	{
@@ -79,16 +84,22 @@ public class GameMovieCtrl : SSGameMono
 			//IsTestXiaoScreen = true; //test
 			if (!XkGameCtrl.IsGameOnQuit)
 			{
-				if (Screen.fullScreen
-					|| Screen.currentResolution.width != 1280
-					|| Screen.currentResolution.height != 720)
-				{
-					if (!IsTestLJGame && !IsTestXiaoScreen)
-					{
-						Screen.SetResolution(1280, 720, false);
-					}
-				}
-			}
+#if READ_SCREEN_CONFIG
+                IsReadScreenConfig = true;
+                //读取游戏分辨率配置信息.
+                gameObject.AddComponent<ScreenConfig>();
+#else
+                if (Screen.fullScreen
+                    || Screen.currentResolution.width != 1280
+                    || Screen.currentResolution.height != 720)
+                {
+                    if (!IsTestLJGame && !IsTestXiaoScreen)
+                    {
+                        Screen.SetResolution(1280, 720, false);
+                    }
+                }
+#endif
+            }
 			Debug.Log("Unity:!!!!!!IsGameOnQuit!!!!!!");
 
 			if (!IsTestLJGame)
@@ -286,6 +297,30 @@ public class GameMovieCtrl : SSGameMono
         {
             m_ExitUICom.RemoveSelf();
             m_MovieLogoAni.SetActiveHiddenObj(true);
+        }
+    }
+
+    /// <summary>
+    /// 是否产生修改系统时间UI.
+    /// </summary>
+    bool IsCreatFixSystemTime = false;
+    /// <summary>
+    /// 创建修改系统时间UI提示.
+    /// </summary>
+    internal void CreatFixSystemTimeUI()
+    {
+        if (IsCreatFixSystemTime == false)
+        {
+            IsCreatFixSystemTime = true;
+            GameObject gmDataPrefab = (GameObject)Resources.Load("Prefabs/GUI/FixSystemTime/FixTime");
+            if (gmDataPrefab != null)
+            {
+                Instantiate(gmDataPrefab, UICenterTrParent);
+            }
+            else
+            {
+                UnityLogWarning("CreatFixSystemTimeUI -> gmDataPrefab was null!");
+            }
         }
     }
 

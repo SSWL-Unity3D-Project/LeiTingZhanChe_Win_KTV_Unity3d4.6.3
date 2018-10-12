@@ -14,8 +14,13 @@ public class SSUIRoot : SSGameMono
     }
 
     /// <summary>
+    /// 游戏UI管理组件.
+    /// </summary>
+    internal SSGameUICtrl m_GameUIManage;
+    /// <summary>
     /// 退出游戏UI界面控制脚本.
     /// </summary>
     [HideInInspector]
     public SSExitGameUI m_ExitUICom;
+
 }
