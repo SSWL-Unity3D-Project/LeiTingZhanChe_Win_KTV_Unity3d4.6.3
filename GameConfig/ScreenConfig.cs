@@ -61,9 +61,21 @@ public class ScreenConfig : MonoBehaviour
             return;
         }
         IsChangePos = true;
-        
-        Screen.SetResolution(1280, 720, true);
-        StartCoroutine(SetGameWindowInfo());
+
+        if (Screen.fullScreen == true)
+        {
+            Screen.SetResolution(1280, 720, false);
+            StartCoroutine(fixWindowPos(1f)); //move the game to child screen
+            StartCoroutine(fixWindowPos(1.3f)); //make the game full screen
+            StartCoroutine(fixWindowPos(1.5f)); //make the game full screen
+        }
+        else
+        {
+            StartCoroutine(fixWindowPos(0f)); //move the game to child screen
+        }
+
+        //Screen.SetResolution(1280, 720, true);
+        //StartCoroutine(SetGameWindowInfo());
     }
 
     /// <summary>
