@@ -61,6 +61,12 @@ public class ScreenConfig : MonoBehaviour
             return;
         }
         IsChangePos = true;
+        
+        if (PlayerPrefs.GetInt("UnitySelectMonitor") != m_ScreenData.screenIndex)
+        {
+            //修改游戏窗口初始化到那个显示器上面.
+            PlayerPrefs.SetInt("UnitySelectMonitor", m_ScreenData.screenIndex);
+        }
 
         if (Screen.fullScreen == true)
         {
@@ -72,10 +78,19 @@ public class ScreenConfig : MonoBehaviour
         else
         {
             StartCoroutine(fixWindowPos(0f)); //move the game to child screen
+            StartCoroutine(fixWindowPos(0.1f)); //move the game to child screen
+            StartCoroutine(ResetGameScreenInf(1f));
         }
 
         //Screen.SetResolution(1280, 720, true);
         //StartCoroutine(SetGameWindowInfo());
+    }
+
+    IEnumerator ResetGameScreenInf(float time)
+    {
+        yield return new WaitForSeconds(time);
+        PlayerPrefs.SetInt("Screenmanager Resolution Width", m_ScreenData.cx - 6);
+        PlayerPrefs.SetInt("Screenmanager Resolution Height", m_ScreenData.cy - 32);
     }
 
     /// <summary>
@@ -122,6 +137,10 @@ public class ScreenConfig : MonoBehaviour
 
     public class ScreenData
     {
+        /// <summary>
+        /// 显示器编号.
+        /// </summary>
+        internal int screenIndex = 1;
         internal int px = 0;
         internal int py = 0;
         internal int cx = 0;
@@ -171,6 +190,29 @@ public class ScreenConfig : MonoBehaviour
             WriteToFileXml(fileName, "CY", readInfo);
         }
         m_ScreenData.cy = Convert.ToInt32(readInfo);
+        
+        readInfo = ReadFromFileXml(fileName, "ScreenIndex");
+        if (readInfo == null || readInfo == "")
+        {
+            //配置默认显示器编号.
+            readInfo = "1";
+            WriteToFileXml(fileName, "ScreenIndex", readInfo);
+        }
+
+        int displayCount =  Display.displays.Length - 1;
+        //Debug.Log("displayCount ============ " + displayCount);
+        m_ScreenData.screenIndex = Convert.ToInt32(readInfo) - 1;
+        if (displayCount >= 0 && displayCount < m_ScreenData.screenIndex)
+        {
+            //避免数据越界.
+            m_ScreenData.screenIndex = displayCount;
+        }
+
+        if (m_ScreenData.screenIndex < 0)
+        {
+            //修正屏幕索引编号.
+            m_ScreenData.screenIndex = 0;
+        }
     }
 
     public void WriteToFileXml(string fileName, string attribute, string valueStr)
