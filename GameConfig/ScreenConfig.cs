@@ -13,45 +13,79 @@ public class ScreenConfig : MonoBehaviour
     static extern bool SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
     [DllImport("user32")]
     static extern IntPtr GetForegroundWindow();
-    [DllImport("user32")]
-    static extern IntPtr GetActiveWindow();
-    [DllImport("user32")]
-    static extern IntPtr SetActiveWindow(IntPtr hWnd);
-    [DllImport("user32")]
-    static extern bool GetWindowRect(IntPtr hWnd, ref Rect rect);
+    //[DllImport("user32")]
+    //static extern IntPtr GetActiveWindow();
+    //[DllImport("user32")]
+    //static extern IntPtr SetActiveWindow(IntPtr hWnd);
+    //[DllImport("user32")]
+    //static extern bool GetWindowRect(IntPtr hWnd, ref Rect rect);
     [DllImport("user32")]
     static extern int GetWindowLong(IntPtr hWnd, int nIndex);
-    [DllImport("user32")]
-    static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndParent);
-    [DllImport("user32")]
-    static extern int GetSystemMetrics(int nIndex);
-    [DllImport("user32")]
-    static extern int SetForegroundWindow(IntPtr hwnd);
-    [DllImport("user32.dll", EntryPoint = "ShowWindow", SetLastError = true)]
-    static extern bool ShowWindow(IntPtr hWnd, uint nCmdShow);
-    [DllImport("user32")]
-    static extern bool SetMenu(IntPtr hWnd, IntPtr hMenu);
+    //[DllImport("user32")]
+    //static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndParent);
+    //[DllImport("user32")]
+    //static extern int GetSystemMetrics(int nIndex);
+    //[DllImport("user32")]
+    //static extern int SetForegroundWindow(IntPtr hwnd);
+    //[DllImport("user32.dll", EntryPoint = "ShowWindow", SetLastError = true)]
+    //static extern bool ShowWindow(IntPtr hWnd, uint nCmdShow);
+    //[DllImport("user32")]
+    //static extern bool SetMenu(IntPtr hWnd, IntPtr hMenu);
 
     const int GWL_STYLE = -16;
     const int WS_BORDER = 1;
-    const int WS_POPUP = 0x800000;
-    const int WS_SYSMENU = 0x80000;
+    //const int WS_POPUP = 0x800000;
+    //const int WS_SYSMENU = 0x80000;
     
-    const int SWP_NOSIZE = 0x0001;
-    const int SWP_NOMOVE = 0x0002;
-    const uint SW_SHOWNORMAL = 1;
-    const int HWND_NOTOPMOST = 0xffffffe;
+    //const int SWP_NOSIZE = 0x0001;
+    //const int SWP_NOMOVE = 0x0002;
+    //const uint SW_SHOWNORMAL = 1;
+    //const int HWND_NOTOPMOST = 0xffffffe;
 
     const int WS_CAPTION = (int)0x00C00000;
     const int WS_CHILD = (int)0x40000000;
 
     const uint SWP_SHOWWINDOW = 0x0040;
-    const uint SWP_DRAWFRAME = 0x0020;
-    const uint SWP_DEFERERASE = 0x2000;
-    const uint SWP_FRAMECHANGED = 0x0020;
-    const uint SWP_NOZORDER = 0x0004;
-    const int HWND_TOP = 0;
+    //const uint SWP_DRAWFRAME = 0x0020;
+    //const uint SWP_DEFERERASE = 0x2000;
+    //const uint SWP_FRAMECHANGED = 0x0020;
+    //const uint SWP_NOZORDER = 0x0004;
+    //const int HWND_TOP = 0;
     const int HWND_TOPMOST = -1;
+    
+    public delegate bool WNDENUMPROC(IntPtr hwnd, uint lParam);
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern bool EnumWindows(WNDENUMPROC lpEnumFunc, uint lParam);
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern IntPtr GetParent(IntPtr hWnd);
+    [DllImport("user32.dll")]
+    public static extern uint GetWindowThreadProcessId(IntPtr hWnd, ref uint lpdwProcessId);
+    [DllImport("kernel32.dll")]
+    public static extern void SetLastError(uint dwErrCode);
+    /// <summary>
+    /// 获取游戏窗体句柄.
+    /// </summary>
+    IntPtr GetProcessWnd()
+    {
+        IntPtr ptrWnd = IntPtr.Zero;
+        uint pid = (uint)System.Diagnostics.Process.GetCurrentProcess().Id;  // 当前进程 ID  
+        bool bResult = EnumWindows(new WNDENUMPROC(delegate (IntPtr hwnd, uint lParam)
+        {
+            uint id = 0;
+            if (GetParent(hwnd) == IntPtr.Zero)
+            {
+                GetWindowThreadProcessId(hwnd, ref id);
+                if (id == lParam)    // 找到进程对应的主窗口句柄  
+                {
+                    ptrWnd = hwnd;   // 把句柄缓存起来  
+                    SetLastError(0); // 设置无错误  
+                    return false;    // 返回 false 以终止枚举窗口  
+                }
+            }
+            return true;
+        }), pid);
+        return (!bResult && Marshal.GetLastWin32Error() == 0) ? ptrWnd : IntPtr.Zero;
+    }
 
     static bool IsChangePos = false;
     void ChangeWindowPos()
@@ -107,9 +141,16 @@ public class ScreenConfig : MonoBehaviour
     
     void FullScreenViewCtrl()
     {
-        IntPtr m_hWnd = GetForegroundWindow();
-        int dwWindowStyleSave = GetWindowLong(m_hWnd, GWL_STYLE); //保存窗口风格
-        SetWindowLong(m_hWnd, GWL_STYLE,
+        //IntPtr hWnd = GetForegroundWindow();
+        IntPtr hWnd = GetProcessWnd();
+        if (hWnd == IntPtr.Zero)
+        {
+            Debug.LogWarning("FullScreenViewCtrl -> hWnd was wrong!");
+            return;
+        }
+
+        int dwWindowStyleSave = GetWindowLong(hWnd, GWL_STYLE); //保存窗口风格
+        SetWindowLong(hWnd, GWL_STYLE,
                       dwWindowStyleSave & (~WS_CHILD) & (~WS_CAPTION) & (~WS_BORDER));//使窗口不具有CAPTION风格
         
         int x = m_ScreenData.px;
@@ -117,7 +158,7 @@ public class ScreenConfig : MonoBehaviour
         int cx = m_ScreenData.cx;
         int cy = m_ScreenData.cy;
         uint SWP = SWP_SHOWWINDOW;
-        SetWindowPos(m_hWnd, HWND_TOPMOST, x, y, cx, cy, SWP); //修改窗口置全屏
+        SetWindowPos(hWnd, HWND_TOPMOST, x, y, cx, cy, SWP); //修改窗口置全屏
     }
 
     IEnumerator fixWindowPos(float time)
