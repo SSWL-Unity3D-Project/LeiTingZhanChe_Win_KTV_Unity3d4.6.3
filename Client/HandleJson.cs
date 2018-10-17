@@ -23,7 +23,7 @@ public class HandleJson {
 	//valueStr: write the value to the file
 	public void WriteToFileXml(string fileName, string attribute, string valueStr)
 	{
-		return ;
+		//return ;
 		string filepath = Application.dataPath + "/" + fileName;
 		#if UNITY_ANDROID
 		filepath = Application.persistentDataPath + "//" + fileName;
@@ -33,7 +33,7 @@ public class HandleJson {
 		if(!File.Exists (filepath))
 		{
 			XmlDocument xmlDoc = new XmlDocument();
-			XmlElement root = xmlDoc.CreateElement("transforms");
+			XmlElement root = xmlDoc.CreateElement("GameConfig");
 			XmlElement elmNew = xmlDoc.CreateElement("attribute");
 			
 			root.AppendChild(elmNew);
@@ -47,7 +47,7 @@ public class HandleJson {
 		{
 			XmlDocument xmlDoc = new XmlDocument();
 			xmlDoc.Load(filepath);
-			XmlNodeList nodeList=xmlDoc.SelectSingleNode("transforms").ChildNodes;
+			XmlNodeList nodeList=xmlDoc.SelectSingleNode("GameConfig").ChildNodes;
 			
 			foreach(XmlElement xe in nodeList)
 			{
@@ -71,7 +71,7 @@ public class HandleJson {
 		if (!File.Exists (filepath))
 		{
 			XmlDocument xmlDoc = new XmlDocument();
-			XmlElement root = xmlDoc.CreateElement("transforms");
+			XmlElement root = xmlDoc.CreateElement("GameConfig");
 			XmlElement elmNew = xmlDoc.CreateElement("attribute");
 			
 			root.AppendChild(elmNew);
@@ -85,7 +85,7 @@ public class HandleJson {
 		{
 			XmlDocument xmlDoc = new XmlDocument();
 			xmlDoc.Load(filepath);
-			XmlNodeList nodeList=xmlDoc.SelectSingleNode("transforms").ChildNodes;
+			XmlNodeList nodeList=xmlDoc.SelectSingleNode("GameConfig").ChildNodes;
 			
 			foreach(XmlElement xe in nodeList)
 			{
@@ -102,7 +102,7 @@ public class HandleJson {
 	//int.TryParse(valueStr, out aaa);
 	public string ReadFromFileXml(string fileName, string attribute)
 	{
-		return "";
+		//return "";
 		string filepath = Application.dataPath + "/" + fileName;
 		#if UNITY_ANDROID
 		//filepath = Application.persistentDataPath + "//" + fileName;
@@ -115,7 +115,7 @@ public class HandleJson {
 			{
 				XmlDocument xmlDoc = new XmlDocument();
 				xmlDoc.Load(filepath);
-				XmlNodeList nodeList=xmlDoc.SelectSingleNode("transforms").ChildNodes;
+				XmlNodeList nodeList=xmlDoc.SelectSingleNode("GameConfig").ChildNodes;
 				foreach(XmlElement xe in nodeList)
 				{
 					valueStr = xe.GetAttribute(attribute);
@@ -146,7 +146,7 @@ public class HandleJson {
 		{
 			XmlDocument xmlDoc = new XmlDocument();
 			xmlDoc.Load(filepath);
-			XmlNodeList nodeList=xmlDoc.SelectSingleNode("transforms").ChildNodes;
+			XmlNodeList nodeList=xmlDoc.SelectSingleNode("GameConfig").ChildNodes;
 			foreach(XmlElement xe in nodeList)
 			{
 				valueStr = xe.GetAttribute(attribute);
@@ -157,11 +157,4 @@ public class HandleJson {
 		
 		return valueStr;
 	}
-
-	#region handle ini file
-	[DllImport("kernel32.dll")]
-	public extern static int GetPrivateProfileStringA(string segName, string keyName, string sDefault, byte[] buffer, int iLen, string fileName);
-	[DllImport("kernel32.dll")]
-	public extern static int WritePrivateProfileString(string segName, string keyName, string sValue, string fileName);
-	#endregion
 }

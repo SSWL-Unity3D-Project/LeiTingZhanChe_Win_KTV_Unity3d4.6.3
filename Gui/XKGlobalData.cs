@@ -16,9 +16,21 @@ public class XKGlobalData {
 	public static int GameVersionPlayer = 0;
 	public static bool IsFreeMode;
 	public static string GameDiff;
-	public static int GameAudioVolume = 10;
+    static int _GameAudioVolume = 10;
+    public static int GameAudioVolume
+    {
+        set
+        {
+            _GameAudioVolume = Mathf.Clamp(value, 0, 10);
+            //Debug.Log("_GameAudioVolume ========== " + _GameAudioVolume);
+        }
+        get
+        {
+            return _GameAudioVolume;
+        }
+    }
 	static string FilePath = "";
-	static public string FileName = "/config/XKGameConfig.xml";
+	static public string FileName = "../config/GameConfig.ini";
 	static public HandleJson HandleJsonObj = null;
 	float TimeValDaoDanJingGao;
 	static XKGlobalData Instance;
@@ -36,10 +48,18 @@ public class XKGlobalData {
 
             if(HandleJsonObj == null) {
 				HandleJsonObj = HandleJson.GetInstance();
-			}
-			return Instance;
+            }
 
-			string startCoinInfo = HandleJsonObj.ReadFromFileXml(FileName, "START_COIN");
+            string val = HandleJsonObj.ReadFromFileXml(FileName, "GameAudioVolume");
+            if (val == null || val == "")
+            {
+                val = "7";
+                HandleJsonObj.WriteToFileXml(FileName, "GameAudioVolume", val);
+            }
+            GameAudioVolume = Convert.ToInt32(val);
+            return Instance;
+#if USE_CONFIG_INFO
+            string startCoinInfo = HandleJsonObj.ReadFromFileXml(FileName, "START_COIN");
 			if(startCoinInfo == null || startCoinInfo == "") {
 				startCoinInfo = "1";
 				HandleJsonObj.WriteToFileXml(FileName, "START_COIN", startCoinInfo);
@@ -100,8 +120,9 @@ public class XKGlobalData {
 				HandleJsonObj.WriteToFileXml(FileName, "GameVersionPlayer", val);
 			}
 			GameVersionPlayer = Convert.ToInt32(val);
-		}
-		return Instance;
+#endif
+        }
+        return Instance;
 	}
 
 	void InitInfo()

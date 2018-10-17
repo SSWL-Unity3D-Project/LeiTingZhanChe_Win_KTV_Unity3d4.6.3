@@ -361,8 +361,8 @@ public class pcvr : MonoBehaviour
 		lastUpTime = Time.realtimeSinceStartup;
 		InitHandleJsonInfo();
 		InitJiaoYanMiMa();
-		InitSteerInfo();
-		InitYouMenInfo();
+		//InitSteerInfo();
+		//InitYouMenInfo();
 
         if (IsHongDDShouBing)
         {
@@ -503,13 +503,18 @@ public class pcvr : MonoBehaviour
         /// </summary>
         public int Index = -1;
         /// <summary>
+        /// 玩家Id.
+        /// </summary>
+        public int m_UserId = 0;
+        /// <summary>
         /// 游戏外设操作设备.
         /// </summary>
         public GamePadType m_GamePadType = GamePadType.Null;
-        public TVYaoKongPlayerData(int indexVal, GamePadType pad)
+        public TVYaoKongPlayerData(int indexVal, GamePadType pad, int userId)
         {
             Index = indexVal;
             m_GamePadType = pad;
+            m_UserId = userId;
         }
 
         public void Reset()
@@ -590,7 +595,7 @@ public class pcvr : MonoBehaviour
                             m_GmWXLoginDt[index].IsActiveGame = true;
                             m_GmWXLoginDt[index].m_GamePadType = GamePadType.TV_YaoKongQi;
                             m_PlayerHeadUrl[index] = "";
-                            m_GmTVLoginDt = new TVYaoKongPlayerData(index, GamePadType.TV_YaoKongQi);
+                            m_GmTVLoginDt = new TVYaoKongPlayerData(index, GamePadType.TV_YaoKongQi, 0);
                             InputEventCtrl.GetInstance().OnClickGameStartBt(index);
                         }
                     }
@@ -668,9 +673,15 @@ public class pcvr : MonoBehaviour
         m_IndexPlayerActiveGameState[index] = activeState;
         if (activeState == (int)PlayerActiveState.WeiJiHuo)
         {
+            int userId = 0;
             GamePlayerData playerDt = m_GamePlayerData.Find((dt) => { return dt.Index.Equals(index); });
             if (playerDt != null)
             {
+                if (playerDt.m_PlayerWeiXinData != null)
+                {
+                    userId = playerDt.m_PlayerWeiXinData.userId;
+                }
+
                 if (playerDt.IsExitWeiXin)
                 {
                     //玩家已经退出微信.
@@ -693,13 +704,13 @@ public class pcvr : MonoBehaviour
                     case GamePadType.WeiXin_ShouBing:
                         {
                             //微信手柄玩家血值耗尽了.
-                            m_TVYaoKongPlayerDt.Add(new TVYaoKongPlayerData(index, GamePadType.WeiXin_ShouBing));
+                            m_TVYaoKongPlayerDt.Add(new TVYaoKongPlayerData(index, GamePadType.WeiXin_ShouBing, userId));
                             break;
                         }
                     case GamePadType.TV_YaoKongQi:
                         {
                             //电视遥控器玩家血值耗尽了.
-                            m_TVYaoKongPlayerDt.Add(new TVYaoKongPlayerData(index, GamePadType.TV_YaoKongQi));
+                            m_TVYaoKongPlayerDt.Add(new TVYaoKongPlayerData(index, GamePadType.TV_YaoKongQi, 0));
                             if (m_GmTVLoginDt != null)
                             {
                                 //关闭玩家发射子弹的按键消息.
@@ -746,6 +757,50 @@ public class pcvr : MonoBehaviour
     }
 
     /// <summary>
+    /// 点击微信游戏虚拟手柄上的按键事件.
+    /// 主要用于玩家血值耗尽后的再次复活功能.
+    /// </summary>
+    void OnClickWXGamePadBt(ButtonState val, int userId)
+    {
+        if (val == ButtonState.DOWN)
+        {
+            Debug.Log("Unity: pcvr -> OnClickWXGamePadBt...");
+            int count = m_TVYaoKongPlayerDt.Count;
+            for (int i = 0; i < count; i++)
+            {
+                TVYaoKongPlayerData playerDt = m_TVYaoKongPlayerDt[i];
+                if (playerDt != null && playerDt.m_UserId == userId)
+                {
+                    int indexPlayer = playerDt.Index;
+                    //清理最后一个血值耗尽的玩家信息.
+                    m_TVYaoKongPlayerDt.RemoveAt(i);
+
+                    if (indexPlayer > -1 && indexPlayer < 4)
+                    {
+                        switch (playerDt.m_GamePadType)
+                        {
+                            case GamePadType.WeiXin_ShouBing:
+                                {
+                                    if (m_GmWXLoginDt[indexPlayer].IsLoginWX)
+                                    {
+                                        if (!m_GmWXLoginDt[indexPlayer].IsActiveGame)
+                                        {
+                                            Debug.Log("Unity: click WXGamePad EnterBt -> active " + indexPlayer + " player!");
+                                            m_GmWXLoginDt[indexPlayer].IsActiveGame = true;
+                                            InputEventCtrl.GetInstance().OnClickGameStartBt(indexPlayer);
+                                        }
+                                    }
+                                    break;
+                                }
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    /// <summary>
     /// 发射按键响应.
     /// </summary>
     private void OnEventActionOperation(string val, int userId)
@@ -785,6 +840,21 @@ public class pcvr : MonoBehaviour
                 {
                     InputEventCtrl.GetInstance().OnClickFireBt(playerDt.Index, ButtonState.UP);
                     InputEventCtrl.GetInstance().OnClickDaoDanBt(playerDt.Index, ButtonState.UP);
+                }
+            }
+            else
+            {
+                //处于没有激活状态的玩家才可以进行游戏操作.
+                if (val == PlayerShouBingFireBt.fireADown.ToString()
+                    || val == PlayerShouBingFireBt.fireXDown.ToString())
+                {
+                    OnClickWXGamePadBt(ButtonState.DOWN, userId);
+                }
+
+                if (val == PlayerShouBingFireBt.fireBDown.ToString()
+                    || val == PlayerShouBingFireBt.fireYDown.ToString())
+                {
+                    OnClickWXGamePadBt(ButtonState.DOWN, userId);
                 }
             }
         }

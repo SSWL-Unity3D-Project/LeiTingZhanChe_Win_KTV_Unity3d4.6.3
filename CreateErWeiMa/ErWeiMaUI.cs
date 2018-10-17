@@ -44,7 +44,7 @@ public class ErWeiMaUI : MonoBehaviour
                 }
             case SSBoxPostNet.WeiXinShouBingEnum.XiaoChengXu:
                 {
-                    if (pcvr.GetInstance().m_BarcodeCam.m_ErWeuMaImg != null)
+                    if (pcvr.GetInstance().m_BarcodeCam != null && pcvr.GetInstance().m_BarcodeCam.m_ErWeuMaImg != null)
                     {
                         //直接加载微信小程序二维码.
                         ReloadGameWXPadXiaoChengXuErWeiMa();
