@@ -59,11 +59,6 @@ public class BuJiBaoCtrl : MonoBehaviour {
 //	NetworkView NetworkViewCom;
 	void Start()
 	{
-//		NetworkViewCom = GetComponent<NetworkView>();
-		//if (transform.parent != XkGameCtrl.MissionCleanup) {
-		//	transform.parent = XkGameCtrl.MissionCleanup;
-		//}
-        transform.SetParent(XkGameCtrl.GetInstance().DaoJuArray);
 		DaoJuTr = transform;
 		BoxCol = GetComponent<BoxCollider>();
 	}
@@ -333,7 +328,8 @@ public class BuJiBaoCtrl : MonoBehaviour {
 	public void SetIsSpawnDaoJu()
 	{
 		IsSpawnDaoJu = true;
-	}
+        transform.SetParent(XkGameCtrl.GetInstance().DaoJuArray);
+    }
 
 	void CheckPlayerDistance()
 	{

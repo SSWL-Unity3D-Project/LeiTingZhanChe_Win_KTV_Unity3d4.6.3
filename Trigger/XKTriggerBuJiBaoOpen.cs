@@ -31,7 +31,8 @@ public class XKTriggerBuJiBaoOpen : MonoBehaviour {
 //		}
 //		IsActiveTrigger = true;
 		StartCoroutine(SpawnBuJiBaoToPlayer());
-	}
+        Destroy(gameObject);
+    }
 	
 	void OnDrawGizmosSelected()
 	{

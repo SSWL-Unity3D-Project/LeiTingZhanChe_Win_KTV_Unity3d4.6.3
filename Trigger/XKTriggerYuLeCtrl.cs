@@ -64,6 +64,7 @@ public class XKTriggerYuLeCtrl : MonoBehaviour
 			IsActiveYuLeTrigger = false;
 			XKPlayerMoveCtrl.SetPlayerJiSuMoveSpeed(PlayerEnum.Null);
 			break;
-		}
-	}
+        }
+        Destroy(gameObject);
+    }
 }

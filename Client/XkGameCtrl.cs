@@ -223,7 +223,7 @@ public class XkGameCtrl : SSGameMono
 		try
 		{
 			_Instance = this;
-			pcvr.OpenDongGanState();
+            pcvr.OpenDongGanState();
 			pcvr.OpenAllPlayerFangXiangPanPower();
 			switch (XKGlobalData.GameDiff)
 			{
@@ -474,7 +474,9 @@ public class XkGameCtrl : SSGameMono
 			PlayerAmmoArray = objMiss.transform;
 			XKNpcSpawnListCtrl.GetInstance();
 
-			PlayerYouLiangCur = 0f;
+            AddCreatGameSceneCom();
+
+            PlayerYouLiangCur = 0f;
 			Invoke("DelayResetIsLoadingLevel", 2f);
 			Invoke("TestInitCameraRender", 0.5f);
 
@@ -2794,6 +2796,19 @@ public class XkGameCtrl : SSGameMono
         if (m_ExitUICom != null)
         {
             m_ExitUICom.RemoveSelf();
+        }
+    }
+
+    internal SSCreatScene m_CreatSceneCom = null;
+    /// <summary>
+    /// 添加创建游戏场景组件.
+    /// </summary>
+    void AddCreatGameSceneCom()
+    {
+        if (m_CreatSceneCom == null)
+        {
+            m_CreatSceneCom = gameObject.AddComponent<SSCreatScene>();
+            m_CreatSceneCom.Init();
         }
     }
 

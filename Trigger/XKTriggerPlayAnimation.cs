@@ -21,7 +21,8 @@ public class XKTriggerPlayAnimation : MonoBehaviour {
 		}
 
 		PlayAnimation();
-	}
+        Destroy(gameObject);
+    }
 
 	public void PlayAnimation()
 	{

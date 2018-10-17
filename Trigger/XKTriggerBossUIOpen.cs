@@ -26,7 +26,8 @@ public class XKTriggerBossUIOpen : MonoBehaviour
 			return;
 		}
 		XKBossXueTiaoCtrl.GetInstance().OpenBossXueTiao(TimeBoss);
-	}
+        Destroy(gameObject);
+    }
 
 	void OnDrawGizmosSelected()
 	{

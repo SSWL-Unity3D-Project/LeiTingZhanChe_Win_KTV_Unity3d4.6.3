@@ -67,7 +67,8 @@ public class XKTriggerRemoveNpc : MonoBehaviour {
 //		}
 
 		RemoveSpawnPointNpc();
-	}
+        Destroy(gameObject);
+    }
 
 	public void RemoveSpawnPointNpc()
 	{

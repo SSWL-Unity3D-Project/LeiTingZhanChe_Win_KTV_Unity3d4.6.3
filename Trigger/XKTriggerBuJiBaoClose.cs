@@ -15,13 +15,9 @@ public class XKTriggerBuJiBaoClose : MonoBehaviour {
 			return;
 		}
 		TriggerBuJiBaoOpen.CloseSpawnBuJiBaoToPlayer();
-
-//		bool isClose = TriggerBuJiBaoOpen.CloseSpawnBuJiBaoToPlayer();
-//		if (!isClose) {
-//			return;
-//		}
-//		gameObject.SetActive(false);
-	}
+        
+        Destroy(gameObject);
+    }
 
 	void OnDrawGizmosSelected()
 	{

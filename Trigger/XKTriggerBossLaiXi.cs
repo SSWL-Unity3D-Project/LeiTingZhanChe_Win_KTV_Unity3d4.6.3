@@ -25,7 +25,8 @@ public class XKTriggerBossLaiXi : MonoBehaviour
 			return;
 		}
 		XKBossLXCtrl.GetInstance().StartPlayBossLaiXi();
-	}
+        Destroy(gameObject);
+    }
 
 	void OnDrawGizmosSelected()
 	{

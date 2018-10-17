@@ -54,7 +54,8 @@ public class XKTriggerEndCartoon : MonoBehaviour {
 		}
 		//Debug.Log("Unity:"+"XKTriggerSpawnNpc::OnTriggerEnter -> hit "+other.name);
 		CloseStartCartoon();
-	}
+        Destroy(gameObject);
+    }
 
 	void MakeOtherPortCloseCartoon()
 	{

@@ -25,7 +25,8 @@ public class XKTriggerAudioBeiJing : MonoBehaviour
 			return;
 		}
 		AudioBeiJingCtrl.StopGameBeiJingAudio();
-	}
+        Destroy(gameObject);
+    }
 	
 	void OnDrawGizmosSelected()
 	{
