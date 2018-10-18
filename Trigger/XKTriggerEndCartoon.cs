@@ -107,7 +107,8 @@ public class XKTriggerEndCartoon : MonoBehaviour {
 		gameObject.SetActive(false);
 	}
 
-	void OnDrawGizmosSelected()
+#if UNITY_EDITOR
+    void OnDrawGizmosSelected()
 	{
 		if (!XkGameCtrl.IsDrawGizmosObj) {
 			return;
@@ -121,4 +122,5 @@ public class XKTriggerEndCartoon : MonoBehaviour {
 			TestPlayerPath.DrawPath();
 		}
 	}
+#endif
 }

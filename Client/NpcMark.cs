@@ -53,7 +53,8 @@ public class NpcMark : MonoBehaviour {
 		this.enabled = IsFireFeiJiNpc;
 	}
 
-	void OnDrawGizmosSelected()
+#if UNITY_EDITOR
+    void OnDrawGizmosSelected()
 	{
 		if (!XkGameCtrl.IsDrawGizmosObj) {
 			return;
@@ -66,8 +67,9 @@ public class NpcMark : MonoBehaviour {
 		CheckAniName();
 		DrawPath();
 	}
+#endif
 
-	void CheckAniName()
+    void CheckAniName()
 	{
 		if (AniName == AnimatorNameNPC.Fire1 || AniName == AnimatorNameNPC.Fire2) {
 			AniName = AnimatorNameNPC.Null;
@@ -96,7 +98,7 @@ public class NpcMark : MonoBehaviour {
 		//"Ignore Raycast"
 		gameObject.layer = LayerMask.NameToLayer("TransparentFX");
 	}
-	
+
 //	void OnTriggerEnter(Collider other)
 //	{
 //		//Debug.Log("Unity:"+"OnTriggerEnter...name "+other.name);
@@ -111,7 +113,8 @@ public class NpcMark : MonoBehaviour {
 //		script.SetNpcIsDoFire(this);
 //	}
 
-	public void DrawPath()
+#if UNITY_EDITOR
+    public void DrawPath()
 	{
 		Transform parTran = transform.parent;
 		NpcPathCtrl pathScript = parTran.GetComponent<NpcPathCtrl>();
@@ -120,6 +123,7 @@ public class NpcMark : MonoBehaviour {
 			pathScript.DrawPath();
 		}
 	}
+#endif
 }
 
 public enum NpcRunState

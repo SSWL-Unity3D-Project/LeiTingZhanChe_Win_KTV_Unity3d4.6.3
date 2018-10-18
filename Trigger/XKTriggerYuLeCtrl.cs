@@ -34,6 +34,7 @@ public class XKTriggerYuLeCtrl : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     void OnDrawGizmosSelected()
 	{
 		if (!XkGameCtrl.IsDrawGizmosObj) {
@@ -48,8 +49,9 @@ public class XKTriggerYuLeCtrl : MonoBehaviour
 			TestPlayerPath.DrawPath();
 		}
 	}
+#endif
 
-	void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
 	{	
 		if (other.GetComponent<XkPlayerCtrl>() == null) {
 			return;

@@ -28,7 +28,8 @@ public class XKTriggerBossLaiXi : MonoBehaviour
         Destroy(gameObject);
     }
 
-	void OnDrawGizmosSelected()
+#if UNITY_EDITOR
+    void OnDrawGizmosSelected()
 	{
 		if (!XkGameCtrl.IsDrawGizmosObj) {
 			return;
@@ -42,4 +43,5 @@ public class XKTriggerBossLaiXi : MonoBehaviour
 			TestPlayerPath.DrawPath();
 		}
 	}
+#endif
 }

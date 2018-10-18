@@ -3,7 +3,8 @@ using System.Collections;
 
 public class AiPathGroupCtrl : MonoBehaviour {
 	public PlayerTypeEnum PathState = PlayerTypeEnum.FeiJi;
-	void OnDrawGizmosSelected()
+#if UNITY_EDITOR
+    void OnDrawGizmosSelected()
 	{
 		if (!XkGameCtrl.IsDrawGizmosObj) {
 			return;
@@ -18,4 +19,5 @@ public class AiPathGroupCtrl : MonoBehaviour {
 			PathArray[i].name = PathState + "AiPath_" + (i+1);
 		}
 	}
+#endif
 }

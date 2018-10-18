@@ -272,7 +272,8 @@ public class XKSpawnNpcPoint : MonoBehaviour
 		FiJiNpcPointList.Clear();
 	}
 
-	void OnDrawGizmosSelected()
+#if UNITY_EDITOR
+    void OnDrawGizmosSelected()
 	{
 		if (!XkGameCtrl.IsDrawGizmosObj) {
 			return;
@@ -315,9 +316,10 @@ public class XKSpawnNpcPoint : MonoBehaviour
 			iTween.DrawPath(tranArray, Color.blue);
 		}
 		MakeObjMoveToLand();
-	}
+    }
+#endif
 
-	public void SpawnPointAllNpc()
+    public void SpawnPointAllNpc()
 	{
 		if (XkGameCtrl.GetInstance().IsCartoonShootTest && NpcObj == null) {
 			return;

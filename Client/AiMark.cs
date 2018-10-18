@@ -99,7 +99,9 @@ public class AiMark : MonoBehaviour
 		playerScript.PlayZhuJiaoMarkAction(this);
 	}
 
-	void OnDrawGizmosSelected()
+
+#if UNITY_EDITOR
+    void OnDrawGizmosSelected()
 	{
 		if (!XkGameCtrl.IsDrawGizmosObj) {
 			return;
@@ -139,8 +141,9 @@ public class AiMark : MonoBehaviour
 		}
 		pathScript.DrawPath();
 	}
-	
-	void CheckPathMarkScale()
+#endif
+
+    void CheckPathMarkScale()
 	{
 		Vector3 scale = new Vector3(1f, 1f, 1f);
 		if (transform.localScale != scale) {

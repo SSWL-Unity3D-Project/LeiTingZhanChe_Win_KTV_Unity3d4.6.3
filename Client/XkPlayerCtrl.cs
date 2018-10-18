@@ -157,7 +157,8 @@ PlayerAudio[6] -> 主角飞机/坦克行驶音效.
 //		}
 	}
 
-	void OnDrawGizmosSelected()
+#if UNITY_EDITOR
+    void OnDrawGizmosSelected()
 	{
 		if (!XkGameCtrl.IsDrawGizmosObj) {
 			return;
@@ -177,8 +178,9 @@ PlayerAudio[6] -> 主角飞机/坦克行驶音效.
 		}
 		pathScript.DrawPath();
 	}
+#endif
 
-	void FixedUpdate()
+    void FixedUpdate()
 	{
 		SmothMovePlayerCamera();
 	}

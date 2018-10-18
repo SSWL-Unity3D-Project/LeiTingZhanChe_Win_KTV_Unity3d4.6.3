@@ -177,7 +177,7 @@ public class XKTriggerSpawnNpc : MonoBehaviour
 		RenameNpcSpawnPoint();
 	}
 
-	//#if UNITY_EDITOR
+#if UNITY_EDITOR
 	private void OnDrawGizmosSelected()
 	{
 		DrawGizmos(true);
@@ -219,7 +219,7 @@ public class XKTriggerSpawnNpc : MonoBehaviour
 			TestPlayerPath.DrawPath();
 		}
 	}
-//#endif
+#endif
 
 	public void CleanEmptySpawnPointGroup()
 	{

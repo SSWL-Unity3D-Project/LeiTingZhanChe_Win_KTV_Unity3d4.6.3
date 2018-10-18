@@ -78,7 +78,8 @@ public class XKTriggerRemoveNpc : MonoBehaviour {
 		}
 	}
 
-	void OnDrawGizmosSelected()
+#if UNITY_EDITOR
+    void OnDrawGizmosSelected()
 	{
 		if (!XkGameCtrl.IsDrawGizmosObj) {
 			return;
@@ -104,4 +105,5 @@ public class XKTriggerRemoveNpc : MonoBehaviour {
 			TestPlayerPath.DrawPath();
 		}
 	}
+#endif
 }

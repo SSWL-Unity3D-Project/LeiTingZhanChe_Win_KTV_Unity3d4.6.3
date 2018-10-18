@@ -22,9 +22,9 @@ public class AiPathCtrl : MonoBehaviour
 	Transform PrePathTran1;
 	Transform PrePathTran2;
 	Transform PrePathTran3;
-
-	
-	void OnDrawGizmos()
+    
+#if UNITY_EDITOR
+    void OnDrawGizmos()
 	{
 		if (!IsDrawPath || !enabled) {
 			return;
@@ -32,10 +32,10 @@ public class AiPathCtrl : MonoBehaviour
 		DrawAiPathByMark();
 	}
 
-	/****************************************************
+    /****************************************************
 	 * 路径点个数为[2, 20]个.
 	 ***************************************************/
-	void OnDrawGizmosSelected()
+    void OnDrawGizmosSelected()
 	{
 		if (!XkGameCtrl.IsDrawGizmosObj) {
 			return;
@@ -85,8 +85,9 @@ public class AiPathCtrl : MonoBehaviour
 		}
 		DrawAiPath(nodes.ToArray());
 	}
+#endif
 
-	void CheckNpcPathScript()
+    void CheckNpcPathScript()
 	{
 		AiMark[] markScript = GetComponentsInChildren<AiMark>();
 		if (markScript.Length != transform.childCount) {
@@ -169,12 +170,14 @@ public class AiPathCtrl : MonoBehaviour
 		return pathNode;
 	}
 
-	public void DrawPath()
+#if UNITY_EDITOR
+    public void DrawPath()
 	{
 		OnDrawGizmosSelected();
 	}
+#endif
 
-	public void SetPrePathTran(Transform tranVal)
+    public void SetPrePathTran(Transform tranVal)
 	{
 		PrePathNum++;
 		switch(PrePathNum)

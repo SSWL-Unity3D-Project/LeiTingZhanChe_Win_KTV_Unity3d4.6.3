@@ -33,8 +33,9 @@ public class XKTriggerBuJiBaoOpen : MonoBehaviour {
 		StartCoroutine(SpawnBuJiBaoToPlayer());
         Destroy(gameObject);
     }
-	
-	void OnDrawGizmosSelected()
+
+#if UNITY_EDITOR
+    void OnDrawGizmosSelected()
 	{
 		if (!XkGameCtrl.IsDrawGizmosObj) {
 			return;
@@ -48,8 +49,9 @@ public class XKTriggerBuJiBaoOpen : MonoBehaviour {
 			TestPlayerPath.DrawPath();
 		}
 	}
+#endif
 
-	IEnumerator SpawnBuJiBaoToPlayer()
+    IEnumerator SpawnBuJiBaoToPlayer()
 	{
 		do {
 			if (CountBJ >= BuJiBao.Length) {

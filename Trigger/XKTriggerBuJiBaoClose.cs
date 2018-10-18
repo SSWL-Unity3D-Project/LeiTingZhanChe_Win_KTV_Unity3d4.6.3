@@ -19,7 +19,8 @@ public class XKTriggerBuJiBaoClose : MonoBehaviour {
         Destroy(gameObject);
     }
 
-	void OnDrawGizmosSelected()
+#if UNITY_EDITOR
+    void OnDrawGizmosSelected()
 	{
 		if (!XkGameCtrl.IsDrawGizmosObj) {
 			return;
@@ -33,4 +34,5 @@ public class XKTriggerBuJiBaoClose : MonoBehaviour {
 			TestPlayerPath.DrawPath();
 		}
 	}
+#endif
 }
