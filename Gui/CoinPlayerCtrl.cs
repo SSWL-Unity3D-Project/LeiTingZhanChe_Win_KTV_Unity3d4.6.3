@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿#define USE_AUTO_START_GAME
+using UnityEngine;
 
 public class CoinPlayerCtrl : MonoBehaviour {
 	public PlayerEnum PlayerSt = PlayerEnum.Null;
@@ -131,7 +131,7 @@ public class CoinPlayerCtrl : MonoBehaviour {
 			return;
 		}
 
-		if (GameOverCtrl.IsShowGameOver) {
+        if (GameOverCtrl.IsShowGameOver) {
 			return;
 		}
 		XKGlobalData.GetInstance().PlayStartBtAudio();
@@ -259,8 +259,13 @@ public class CoinPlayerCtrl : MonoBehaviour {
 			else if (XKGlobalData.CoinPlayerOne >= XKGlobalData.GameNeedCoin && (InsertCoinObj.activeSelf || !StartBtObj.activeSelf)) {
 				InsertCoinObj.SetActive(false); //Hidden Insert Coin
 				StartBtObj.SetActive(true);
-			}
-		}
+#if USE_AUTO_START_GAME
+                //运营模式.
+                //玩家币值如果大于启动币数则自动开始.
+                InputEventCtrl.GetInstance().OnClickGameStartBt((int)PlayerSt - 1);
+#endif
+            }
+        }
 		else {
 			if (!StartBtObj.activeSelf) {
 				StartBtObj.SetActive(true);
@@ -286,8 +291,13 @@ public class CoinPlayerCtrl : MonoBehaviour {
 			else if (XKGlobalData.CoinPlayerTwo >= XKGlobalData.GameNeedCoin && (InsertCoinObj.activeSelf || !StartBtObj.activeSelf)) {
 				InsertCoinObj.SetActive(false); //Hidden Insert Coin
 				StartBtObj.SetActive(true);
-			}
-		}
+#if USE_AUTO_START_GAME
+                //运营模式.
+                //玩家币值如果大于启动币数则自动开始.
+                InputEventCtrl.GetInstance().OnClickGameStartBt((int)PlayerSt - 1);
+#endif
+            }
+        }
 		else {
 			if (!StartBtObj.activeSelf) {
 				StartBtObj.SetActive(true);
@@ -313,8 +323,13 @@ public class CoinPlayerCtrl : MonoBehaviour {
 			else if (XKGlobalData.CoinPlayerThree >= XKGlobalData.GameNeedCoin && (InsertCoinObj.activeSelf || !StartBtObj.activeSelf)) {
 				InsertCoinObj.SetActive(false); //Hidden Insert Coin
 				StartBtObj.SetActive(true);
-			}
-		}
+#if USE_AUTO_START_GAME
+                //运营模式.
+                //玩家币值如果大于启动币数则自动开始.
+                InputEventCtrl.GetInstance().OnClickGameStartBt((int)PlayerSt - 1);
+#endif
+            }
+        }
 		else {
 			if (!StartBtObj.activeSelf) {
 				StartBtObj.SetActive(true);
@@ -340,8 +355,13 @@ public class CoinPlayerCtrl : MonoBehaviour {
 			else if (XKGlobalData.CoinPlayerFour >= XKGlobalData.GameNeedCoin && (InsertCoinObj.activeSelf || !StartBtObj.activeSelf)) {
 				InsertCoinObj.SetActive(false); //Hidden Insert Coin
 				StartBtObj.SetActive(true);
-			}
-		}
+#if USE_AUTO_START_GAME
+                //运营模式.
+                //玩家币值如果大于启动币数则自动开始.
+                InputEventCtrl.GetInstance().OnClickGameStartBt((int)PlayerSt - 1);
+#endif
+            }
+        }
 		else {
 			if (!StartBtObj.activeSelf) {
 				StartBtObj.SetActive(true);

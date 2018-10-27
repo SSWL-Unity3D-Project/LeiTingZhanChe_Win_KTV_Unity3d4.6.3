@@ -80,7 +80,10 @@ public class XKBossXueTiaoCtrl : MonoBehaviour
 
 	public void HiddenBossXueTiao()
 	{
-		BossZuDangCtrl.GetInstance().SetIsActiveBossZuDang(false);
+        if (BossZuDangCtrl.GetInstance() != null)
+        {
+            BossZuDangCtrl.GetInstance().SetIsActiveBossZuDang(false);
+        }
 		gameObject.SetActive(false);
 		GameTimeBossCtrl.GetInstance().HiddenGameTime();
 	}

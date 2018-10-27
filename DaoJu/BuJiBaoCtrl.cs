@@ -107,10 +107,31 @@ public class BuJiBaoCtrl : MonoBehaviour {
 			isHiddenDaoJu = true;
 		}
 
+        if (isHiddenDaoJu == IsHiddenDaoJuTr)
+        {
+            return;
+        }
+
+        if (isHiddenDaoJu == true)
+        {
+            CountHidden++;
+            if (CountHidden >= 2)
+            {
+                //Debug.Log("Should remove the object daoJu! objName ==== " + gameObject.name);
+                Destroy(gameObject);
+                return;
+            }
+        }
+
 		IsHiddenDaoJuTr = isHiddenDaoJu;
 		Transform childTr = DaoJuTr.GetChild(0);
 		childTr.gameObject.SetActive(!isHiddenDaoJu);
 	}
+
+    /// <summary>
+    /// 隐藏计数.
+    /// </summary>
+    int CountHidden = 0;
 
 	void OnCollisionEnter(Collision collision)
 	{

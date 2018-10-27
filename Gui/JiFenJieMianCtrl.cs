@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿//#define USE_LOADING_NEXT_SCENE
+#define CREAT_GAME_SCENE
+using UnityEngine;
 
 public class JiFenJieMianCtrl : MonoBehaviour {
 	public GameObject JiFenJieMianObj;
@@ -117,9 +118,26 @@ public class JiFenJieMianCtrl : MonoBehaviour {
 			return;
 		}
 
-		CountJiFenOpen++;
-		//CountJiFenOpen = 4; //test.
-		if (CountJiFenOpen < 4) {
+        CountJiFenOpen++;
+#if CREAT_GAME_SCENE
+        //动态加载下一关的游戏场景预制文件.
+        XkGameCtrl.GetInstance().m_CreatSceneCom.CreatGameScene(CountJiFenOpen);
+#endif
+
+#if USE_LOADING_NEXT_SCENE
+        //直接加载下一关的游戏场景.
+        if (Application.loadedLevel < 4)
+        {
+            Application.LoadLevel(Application.loadedLevel + 1);
+        }
+        else
+        {
+            Application.LoadLevel(0);
+        }
+#endif
+
+        //CountJiFenOpen = 4; //test.
+        if (CountJiFenOpen < 4) {
 			XKBossXueTiaoCtrl.IsWuDiPlayer = false;
 			XKTriggerStopMovePlayer.IsActiveTrigger = false;
 			GameTimeCtrl.GetInstance().OpenGameTime();

@@ -12,11 +12,15 @@ public class BossZuDangCtrl : MonoBehaviour
 	void Awake()
 	{
 		_Instance = this;
-		BoxCollider[] boxColArray = gameObject.GetComponentsInChildren<BoxCollider>();
-		foreach (BoxCollider item in boxColArray) {
-			item.gameObject.layer = LayerMask.NameToLayer("UI");
-			item.renderer.enabled = false;
-		}
+        BoxCollider boxCol = gameObject.GetComponent<BoxCollider>();
+        boxCol.gameObject.layer = LayerMask.NameToLayer("UI");
+        boxCol.renderer.enabled = false;
+
+        //BoxCollider[] boxColArray = gameObject.GetComponentsInChildren<BoxCollider>();
+		//foreach (BoxCollider item in boxColArray) {
+		//	item.gameObject.layer = LayerMask.NameToLayer("UI");
+		//	item.renderer.enabled = false;
+		//}
 		SetIsActiveBossZuDang(false);
 	}
 

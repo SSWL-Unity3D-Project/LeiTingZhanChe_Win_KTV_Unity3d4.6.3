@@ -7,7 +7,13 @@ public class SSCreatScene : SSGameMono
     {
         SceneArray = new GameObject[4];
         //创建第一个游戏场景.
-        CreatGameScene((int)SSTriggerManageScene.SceneInfo.Scene01);
+        //CreatGameScene((int)SSTriggerManageScene.SceneInfo.Scene01);
+
+        //test
+        Resources.UnloadUnusedAssets();
+        int sceneVal = Application.loadedLevel - 1;
+        CreatGameScene(sceneVal);
+        //test
     }
 
     /// <summary>
@@ -19,7 +25,7 @@ public class SSCreatScene : SSGameMono
         {
             if (SceneArray[index] == null)
             {
-                UnityLog("CreatGameScene -> index ================ " + index);
+                //UnityLog("CreatGameScene -> index ================ " + index);
                 int indesScene = index + 1;
                 string prefabInfo = "Prefabs/Scene/Scene0" + indesScene.ToString();
                 GameObject gmDataPrefab = (GameObject)Resources.Load(prefabInfo);
@@ -41,13 +47,14 @@ public class SSCreatScene : SSGameMono
     /// </summary>
     public void RemoveGameScene(int index)
     {
-        UnityLog("RemoveGameScene -> index ================ " + index);
+        //UnityLog("RemoveGameScene -> index ================ " + index);
         if (index >= 0 && index < SceneArray.Length)
         {
             if (SceneArray[index] != null)
             {
                 Destroy(SceneArray[index]);
                 SceneArray[index] = null;
+                Resources.UnloadUnusedAssets();
             }
         }
     }

@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System;
 using System.IO;
+using Assets.XKGame.Script.Server.GamePayManage;
 
 public class XKGlobalData {
 	public static int CoinPlayerOne = 0;
 	public static int CoinPlayerTwo = 0;
 	public static int CoinPlayerThree = 0;
 	public static int CoinPlayerFour = 0;
-	public static int GameNeedCoin;
+	public static int GameNeedCoin = 1;
 	/**
 	 * GameVersionPlayer == 0 -> 四人版本游戏.
 	 * GameVersionPlayer == 1 -> 双人版本游戏.
@@ -29,7 +29,13 @@ public class XKGlobalData {
             return _GameAudioVolume;
         }
     }
-	static string FilePath = "";
+
+    /// <summary>
+    /// 游戏的商户信息.
+    /// </summary>
+    internal SSGameHddPayData.GameShangHuData m_ShangHuDt = null;
+
+    static string FilePath = "";
 	static public string FileName = "../config/GameConfig.ini";
 	static public HandleJson HandleJsonObj = null;
 	float TimeValDaoDanJingGao;

@@ -37,7 +37,7 @@ public class SSTriggerManageScene : MonoBehaviour
             {
                 case ManageState.CREAT:
                     {
-                        XkGameCtrl.GetInstance().m_CreatSceneCom.CreatGameScene((int)SceneData.scene);
+                        //XkGameCtrl.GetInstance().m_CreatSceneCom.CreatGameScene((int)SceneData.scene);
                         break;
                     }
                 case ManageState.REMOVE:

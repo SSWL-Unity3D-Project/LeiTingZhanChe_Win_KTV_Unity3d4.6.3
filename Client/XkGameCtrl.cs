@@ -199,7 +199,7 @@ public class XkGameCtrl : SSGameMono
 	public static int AmmoNumMaxNpc = 30;
 	public static int PlayerActiveNum;
 	static float MaxPlayerHealth = 1000000f;
-	public static float MinBloodUIAmount = 0.34f;
+	public static float MinBloodUIAmount = 0f;
 	static float[] PlayerHealthArray = {0f, 0f, 0f, 0f};
 	public static int[] PlayerJiFenArray = {0, 0, 0, 0};
 /**
@@ -221,8 +221,9 @@ public class XkGameCtrl : SSGameMono
 	void Awake()
 	{
 		try
-		{
-			_Instance = this;
+        {
+            Resources.UnloadUnusedAssets();
+            _Instance = this;
             pcvr.OpenDongGanState();
 			pcvr.OpenAllPlayerFangXiangPanPower();
 			switch (XKGlobalData.GameDiff)
@@ -238,7 +239,7 @@ public class XkGameCtrl : SSGameMono
 					break;
 			}
 			MaxPlayerHealth = PlayerXueLiangMax;
-			KeyBloodUI = (1f - MinBloodUIAmount) / MaxPlayerHealth;
+			KeyBloodUI = 1f / MaxPlayerHealth;
 			XKSpawnNpcPoint.ClearFiJiNpcPointList();
 			XKTriggerStopMovePlayer.IsActiveTrigger = false;
 			XKTriggerYuLeCtrl.IsActiveYuLeTrigger = false;
